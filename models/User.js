@@ -7,46 +7,52 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide name'],
+    minLength: 3,
+    maxLength: 20,
     trim: true,
-    // minLength: 3,
-    // naxLength: 20,
   },
   email: {
     type: String,
     required: [true, 'Please provide email'],
     validate: {
       validator: validator.isEmail,
-      message: 'Please provide validated email',
+      message: 'Please provide a valid email',
     },
     unique: true,
   },
   password: {
     type: String,
     required: [true, 'Please provide password'],
-    // minLength: 6,
+    minLength: 6,
+    select: false,
   },
   lastName: {
     type: String,
     trim: true,
-    // naxLength: 20,
-    default: 'doe'
+    maxLength: 20,
+    default: 'doe',
   },
   location: {
     type: String,
     trim: true,
-    // maxLength: 20,
+    maxLength: 20,
     default: 'my city',
   },
 })
 
 // function argument is not arrow func
-UserSchema.pre('save', async function(){
+UserSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10)
   this.password = await bcrypt.hash(this.password, salt)
 })
 
-UserSchema.methods.createJWT = function() {
-  return jwt.sign({id:this._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_LIFETIME})
+UserSchema.methods.createJWT = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
+}
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password)
+  return isMatch
 }
 
 export default mongoose.model('User', UserSchema)

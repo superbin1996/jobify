@@ -1,7 +1,7 @@
 import { UNSAFE_NavigationContext } from "react-router-dom"
 import User from "../models/User.js"
 import { StatusCodes } from "http-status-codes"
-import { BadRequestError } from "../errors/Index.js"
+import { BadRequestError, UnauthenticatedError } from "../errors/Index.js"
 
 const register = async (request, response) => {
   const { name, email, password } = request.body
@@ -19,14 +19,30 @@ const register = async (request, response) => {
       firstName: user.firstName,
       name: user.name,
       email: user.email,
-    }, 
+    },
     token,
     location: user.location,
   })
 }
 
-const login = async (request, response) => {
-  response.send(`login user`)
+const login = async (req, res) => {
+  const { email, password } = req.body
+  if (!email || !password) {
+    throw new BadRequestError('Please provide all values')
+  }
+  const user = await User.findOne({ email }).select('+password')
+  console.log(user);
+
+  if (!user) {
+    throw new UnauthenticatedError('Invalid Credentials')
+  }
+  const isPasswordCorrect = await user.comparePassword(password)
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError('Invalid Credentials')
+  }
+  const token = user.createJWT()
+  user.password = undefined
+  res.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
 
 const updateUser = async (request, response) => {

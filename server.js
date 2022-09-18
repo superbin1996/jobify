@@ -15,10 +15,11 @@ import jobsRouter from './routes/jobsRoutes.js'
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
 import 'express'
+import morgan from 'morgan'
 
 app.use(express.json())
 
-app.get('/', (request, response)=>{
+app.get('/', (request, response) => {
   response.send(`Welcome!`)
 })
 
@@ -29,12 +30,17 @@ app.use(notFoundMiddleware)
 // Locate errorHandler at the end to catch error
 app.use(errorHandlerMiddleware)
 
+
+if (process.env.NODE_ENV !== `production`) {
+  app.use(morgan('dev'))
+}
+
 const port = process.env.PORT || 5000
 
-const start = async()=>{
+const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL)
-    app.listen(port, ()=>{
+    app.listen(port, () => {
       console.log(`Server is listening on port ${port}...`);
     })
   } catch (error) {
