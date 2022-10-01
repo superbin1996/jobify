@@ -2913,7 +2913,7 @@ export default Profile
 ```js
 appContext.js
 
-const updaterUser = async (currentUser) => {
+const updateUser = async (currentUser) => {
   try {
     const { data } = await axios.patch('/api/v1/auth/updateUser', currentUser, {
       headers: {
@@ -2947,7 +2947,7 @@ const authFetch = axios.create({
   },
 })
 
-const updaterUser = async (currentUser) => {
+const updateUser = async (currentUser) => {
   try {
     const { data } = await authFetch.patch('/auth/updateUser', currentUser)
   } catch (error) {
@@ -3111,12 +3111,12 @@ const JobSchema = new mongoose.Schema(
     company: {
       type: String,
       required: [true, 'Please provide company name'],
-      maxlength: 50,
+      maxLength: 50,
     },
     position: {
       type: String,
       required: [true, 'Please provide position'],
-      maxlength: 100,
+      maxLength: 100,
     },
     status: {
       type: String,
@@ -4283,11 +4283,11 @@ const showStats = async () => {
         },
       })
     } catch (error) {
-console.log(error.response)
+      console.log(error.response)
       // logoutUser()
     }
 
-clearAlert()
+    clearAlert()
   }
   value={{showStats}}
 ```
@@ -5273,7 +5273,7 @@ const getJobs = async () => {
   const { page, search, searchStatus, searchType, sort } = state
 
   let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`
-  // rest of the code
+  // rest of the code 
 }
 ```
 

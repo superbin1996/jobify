@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Wrapper from "../assets/wrappers/RegisterPage"
-import { Logo, FormRow, Alert } from "../components/Index"
+import { Logo, FormRow, Alert } from "../components/index"
 import { useAppContext } from "../context/appContext"
 
 const initialState = {
@@ -23,7 +23,7 @@ const Register = () => {
 		if (user) {
 			setTimeout(() => {
 				navigate('/')
-			}, 3000)
+			}, 1000)
 		}
 	}, [user, navigate])
 

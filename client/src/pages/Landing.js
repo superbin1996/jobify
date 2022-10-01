@@ -1,6 +1,6 @@
 import main from '../assets/images/main.svg'
 import Wrapper from '../assets/wrappers/Testing'
-import { Logo } from '../components/Index'
+import { Logo } from '../components/index'
 import { Link } from 'react-router-dom'
 
 function Landing() {

@@ -1,7 +1,6 @@
-import { UNSAFE_NavigationContext } from "react-router-dom"
 import User from "../models/User.js"
 import { StatusCodes } from "http-status-codes"
-import { BadRequestError, UnauthenticatedError } from "../errors/Index.js"
+import { BadRequestError, UnauthenticatedError } from "../errors/index.js"
 
 const register = async (request, response) => {
   const { name, email, password } = request.body
@@ -25,8 +24,8 @@ const register = async (request, response) => {
   })
 }
 
-const login = async (req, res) => {
-  const { email, password } = req.body
+const login = async (request, response) => {
+  const { email, password } = request.body
   if (!email || !password) {
     throw new BadRequestError('Please provide all values')
   }
@@ -42,11 +41,35 @@ const login = async (req, res) => {
   }
   const token = user.createJWT()
   user.password = undefined
-  res.status(StatusCodes.OK).json({ user, token, location: user.location })
+  response.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
 
 const updateUser = async (request, response) => {
-  response.send(`updateUser user`)
+  const { email, name, lastName, location } = request.body
+  if (!email || !name || !lastName || !location) {
+    throw new BadRequestError('Please provide all values')
+  }
+
+  // userId is defined in auth.js
+  const user = await User.findOne({ _id: request.user.userId })
+
+  user.email = email
+  user.name = name
+  user.lastName = lastName
+  user.location = location
+
+  await user.save()
+
+  // various setups
+  // in this case only id
+  // if other properties included, must re-generate
+
+  const token = user.createJWT()
+  response.status(StatusCodes.OK).json({
+    user,
+    token,
+    location: user.location,
+  })
 }
 
 export { register, login, updateUser }
