@@ -47,6 +47,7 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   userLocation: userLocation || '',
+  // toggle side bar
   showSidebar: false,
   // create job
   position: '',
@@ -117,7 +118,7 @@ const AppProvider = ({ children }) => {
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
-      const response = await authFetch.post('/api/v1/auth/register', currentUser)
+      const response = await axios.post('/api/v1/auth/register', currentUser)
       console.log(response);
       const {
         user, token, location

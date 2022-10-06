@@ -5416,7 +5416,7 @@ web: node server.js
 - git init
 - git add .
 - git commit -m "first commit"
-- heroku create nameOfTheApp
+- heroku create `nameOfTheApp`
 - git remote -v
 - add env variables
 - git push heroku main/master

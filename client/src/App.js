@@ -1,8 +1,5 @@
-
-import Landing from "./pages/Landing";
+import {Error, Register, Landing} from './pages/index'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Error from "./pages/Error";
-import Register from "./pages/Register";
 import { Profile, Stats, SharedLayout, AllJobs, AddJob } from "./pages/dashboard/index";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
