@@ -84,17 +84,20 @@ const AppProvider = ({ children }) => {
   })
 
   // For detail errors
-  authFetch.interceptors.request.use((config) => {
-    config.headers.common['Authorization'] = `Bearer ${state.token}`
-    return config
-  },
+  authFetch.interceptors.request.use(
+    (config) => {
+      config.headers.common['Authorization'] = `Bearer ${state.token}`
+      return config
+    },
     (error) => {
       return Promise.reject(error)
-    })
+    }
+  )
 
-  authFetch.interceptors.response.use((response) => {
-    return response
-  },
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response
+    },
     (error) => {
       // console.log(error.response);
       if (error.response.status === 401) {
@@ -119,7 +122,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
       const response = await axios.post('/api/v1/auth/register', currentUser)
-      console.log(response);
+      // console.log(response);
       const {
         user, token, location
       } = response.data
@@ -266,7 +269,7 @@ const AppProvider = ({ children }) => {
       await authFetch.delete(`/jobs/${jobId}`)
       getJobs()
     } catch (error) {
-      console.log(error.response);
+      // console.log(error.response);
       logoutUser()
     }
   }
@@ -275,7 +278,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SHOW_STATS_BEGIN })
     try {
       const { data } = await authFetch(`/jobs/stats`)
-      console.log(data);
+      // console.log(data);
       dispatch({
         type: SHOW_STATS_SUCCESS,
         payload: {
@@ -284,7 +287,8 @@ const AppProvider = ({ children }) => {
         }
       })
     } catch (error) {
-      console.log(error.response);
+      // console.log(error.response);
+      logoutUser()
     }
     clearAlert()
   }

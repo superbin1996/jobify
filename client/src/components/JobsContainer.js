@@ -45,7 +45,7 @@ const JobsContainer = () => {
           )
         })}
       </div>
-      {totalJobs > 1 && <PageBtnContainer></PageBtnContainer>}
+      {totalJobs > 1 && <PageBtnContainer/>}
     </Wrapper>
   )
 }
